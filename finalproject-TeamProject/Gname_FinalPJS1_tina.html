@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>1023</title>
+    <style>
+        td{
+            border: solid 1px;
+            border-collapse: collapse;
+            padding: 4px;
+        }
+        .duplicated{
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <table>
+
+    </table>
+    <button type="button">Validate</button>
+</body>
+<script>
+    // validate_arr => if find a duplicate numbers then change 0 to 1 in the validate_arr;
+    //         [0, 0, 0, 0, 1, 0, 0, 0, 0]
+    //         [0, 0, 0, 0, 0, 0, 0, 1, 0]
+    //         [0, 0, 1, 0, 0, 0, 0, 0, 0]    
+    //         [0, 0, 0, 0, 0, 0, 0, 0, 1]
+    //         [1, 0, 0, 0, 0, 0, 0, 0, 0]
+    //         [0, 0, 0, 0, 0, 1, 0, 0, 0]
+    //         [0, 0, 0, 1, 0, 0, 0, 0, 0]
+    //         [0, 1, 0, 0, 0, 0, 0, 0, 0]
+    //         [0, 0, 0, 0, 0, 0, 1, 0, 0]
+    let size, values, validate_arr, n;
+    let valiBtn = document.querySelector("button");
+
+    let tablePop = (values) => {
+        const table = document.querySelector("table");
+        for(let rowidx in values){
+            let tr = document.createElement("tr");
+            for(let colIdx in values[rowidx]){
+                let td = document.createElement("td");
+                td.innerHTML = values[rowidx][colIdx];
+                // td.className= "duplicated";
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        }
+        
+    }
+
+    function checkBox(values,size){
+        const numberArr = [1,2,3,4,5,6,7,8,9];
+        let count = true;
+        const squareRoot = Math.sqrt(size);
+        console.log("squareRoot"+squareRoot);
+
+        while(count){
+            count = false;
+            for(let i=0;i<values.length;i++){
+                for(let j=0;j<values[i].length;j++){
+                    let available_row =[];
+                    let available_col =[];
+                    let available_matrix =[];
+                    let current_loc =[];
+                    let available_final =[];
+                    if(values[i][j] === 0){
+                        count = count || true;
+                        // row check
+                        available_row = numberArr.filter((item)=>!values[i].includes(item))
+                        // column check
+                        for(let key of values){
+                            available_col = numberArr.filter((item)=>item!==key[j]);
+                        }
+                        // matrix check
+                        current_loc = [Math.floor((i+1)/squareRoot), Math.floor((j+1)/squareRoot)];
+                        for(let ii = current_loc[0]*squareRoot; ii<current_loc[0]*squareRoot+squareRoot;ii++){
+                            for(let jj = current_loc[1]*squareRoot; ii<current_loc[1]*squareRoot+squareRoot;jj++){
+                                available_matrix.push(values[ii][jj])
+                            }
+                        }
+                        available_matrix=numberArr.filter((item=>!available_matrix.includes(item)))
+                        available_final=[...available_col,...available_row,...available_matrix]
+                        if(available_final.length === 1)
+                        values[i][j] = available_final.shift();
+                    }
+                }
+            }
+        }
+        
+        console.log("check"+isDuplicate(values) );
+        return values;
+    }
+    // position of row, column, box, 
+    function oneSetValidSudoku(values,size) {
+    let set = new Set()
+    const squareRoot = Math.sqrt(size);
+    
+        for (let i = 0; i < values.length; i++) {
+            for (let j = 0; j < values[0].length; j++) {
+                const value = values[i][j]
+                if (value !== ".") {
+                    const row = `${value} at row ${i}`
+                    const column = `${value} at column ${j}`
+                    const box = `${value} at box ${Math.floor(i/squareRoot)}, ${Math.floor(j/squareRoot)}`
+                    console.log(`${row}, ${column}, ${box}`)
+                    if (set.has(row) || set.has(column) || set.has(box)) {
+                        return false
+                    } else {
+                        set.add(row)
+                        set.add(column)
+                        set.add(box)
+                    }
+                }
+            }
+        }
+
+        return true
+    };
+
+    // 중복체크, 중복되는 숫자 1로 변경, 중복안되는건 0
+    function isDuplicate(validate_arr)  {
+        let result="0";
+        const isDup = validate_arr.some(function(x) {
+            return validate_arr.indexOf(x) !== validate_arr.lastIndexOf(x);
+        });
+          
+        (isDup === true)? result="1": result="0";
+        console.log("isDup>>>>"+isDup+"/result"+result);
+        console.log(validate_arr,"111111");
+        return result;
+    }
+
+
+    let validates = () => {
+        // checkRowColumn(); // create function validating row and column
+        // checkBox();
+    }
+    let drawColor = () => {
+        // let rows = document.querySelectorAll("tr");
+        // console.log(rows[1].querySelectorAll('td')[0]);
+        // rows[1].querySelectorAll('td')[2].className = "duplicated";
+    }
+
+    let loadJson = () =>{
+        console.log("inner func");
+        const xmlHTTP = new XMLHttpRequest();
+        xmlHTTP.onload = function(){
+            console.log("onload");
+            let output = JSON.parse(this.responseText)[0];
+            size = output.size;
+            values = output.values;
+            n = Math.sqrt(size);
+            tablePop(values);
+        }
+        xmlHTTP.open("GET","./source.json",true);
+        xmlHTTP.send();
+    }
+    
+    loadJson();
+    valiBtn.addEventListener('click',function(){
+        validate_arr = Array.from(Array(size), () => Array(size).fill(0));
+        isDuplicate(validate_arr); 
+        checkBox(values,size);
+        oneSetValidSudoku(values,size);
+        validates();//excute validation function.
+        drawColor();
+    });
+    
+</script>
+</html>

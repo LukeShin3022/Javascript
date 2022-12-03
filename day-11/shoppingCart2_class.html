@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        tr{
+            cursor: pointer;
+        }
+        tr:hover{
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row align-items-start">
+            <div class="col">
+               <div class="row justify-content-center align-items-center g-2">
+                <div class="col">
+                    <input id="Namesrc" placeholder="write item name"/>
+                </div>
+               </div>
+               <div class="row justify-content-center align-items-center g-2">
+                <div class="col"> <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Item Name</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    
+                    </tbody>
+                </table></div>
+                
+               </div>
+            </div>
+            <div class="col" id="shopcr">
+                
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let products = null;
+    $("#Namesrc").keyup(function(){
+        let srcVal = $(this).val().toLowerCase();
+        $("tbody tr").filter(function(){
+            let name = $($(this).children()[1]).text();
+            $(this).toggle(name.toLowerCase().indexOf(srcVal) > -1)
+        })
+    })
+    function productObj(id,itemName,price,amount){
+        this.id = id;
+        this.itemName = itemName;
+        this.price = price;
+        this.amount = amount;
+        this.totalPrice = price * amount;
+        this.CalTax = function(){
+            let tax = 0;
+            (this.totalPrice < 20) ? tax = 5 : null;
+            (this.totalPrice > 20 && this.totalPrice < 40) ? tax = 8 : null;
+            (this.totalPrice > 40 && this.totalPrice < 100) ? tax = 12 : null;
+            (this.totalPrice > 100) ? tax = 18 : null;
+            return this.totalPrice += this.totalPrice * (tax / 100);
+        };
+        this.CalDiscount = function(DiscountVal){
+            this.totalPrice -= this.totalPrice * (DiscountVal / 100);
+            return this.CalTax();
+        }
+    }
+    $.getJSON('./data/products.json',function(productsCollection){
+        products = productsCollection;
+        $.each(products,function(idx,product){
+            let tr = $("<tr></tr>");
+            $.each(product,function(property,val){
+                let td = $("<td></td>");
+                td.text(val);
+                tr.append(td);
+            });
+            tr.click(function(){
+                $(this).children().each(function(idx,elem){
+                    let div = $("<div></div>");
+                    div.text($(elem).text());
+                    $('#shopcr').append(div);
+                })                
+            })
+            $("tbody").append(tr);
+        })
+    })
+</script>
+</html>

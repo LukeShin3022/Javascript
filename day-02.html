@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <h1 id="max"></h1>
+     <h1 id="student"></h1>
+</body>
+<script>
+    var artType = "PT";
+    var output = "";
+    let actors =["Tom Hardy", "Anjelina Jolie", "Leonardo DiCaprio", "BenedictBenedict Cumberbatch", "Sam Ogata"];
+    switch(artType){
+        case "PT" :
+            output = "Painting";
+            break;
+
+        case "SC" :
+            output = "Sculpture";
+            break;
+            
+        default:
+            output = "Other";
+    }
+    console.log(output);
+    console.log(actors);
+
+    let count = 0;
+    while(count < 5){
+        console.log(count);
+        console.log(actors[count]);
+        count ++;
+    }
+    let numbers = [20,21,18,2,33,107,1,7,88,90];
+    let maxnum = minnum = numbers[0];
+    let sum = 0;
+    let cnt = 0;
+    // using a while loop find the maximum numvver and display it in the console. 
+
+    while(cnt < numbers.length){
+        if(maxnum < numbers[cnt]){
+            maxnum = numbers[cnt];
+        }
+        if(minnum > numbers[cnt]){
+            minnum = numbers[cnt];
+        }
+        sum +=numbers[cnt];
+        cnt ++;
+        // console.log(maxnum);
+    }
+   
+    document.getElementById("max").innerText="Max : "+maxnum+", Min: "+minnum+", sum: "+sum+", Avg: "+ sum/numbers.length;
+
+    //find the indexx of the student name inside studentName
+    let studentName= "luke";
+    let students = ["sam","marcelo","jun","jay","taka","luke"];
+    let cnt2 = 0;
+    // while(cnt2 < students.length){
+    //     if(studentName == students[cnt2]){
+    //         console.log(studentName+" here in the index "+cnt2);
+            
+    //         document.getElementById("student").innerText=studentName+" here in the index "+cnt2;
+    //         break;
+    //     }
+    //     cnt2 ++;
+    //     // console.log(cnt2);
+    // }
+    for(cnt2 = 0; cnt2<students.length; cnt2++){
+        if(studentName == students[cnt2]){ 
+            document.getElementById("student").innerText=studentName+" here in the index "+cnt2;
+            break;
+        }
+    }
+    if(cnt2==students.length) document.getElementById("student").innerText=studentName+" not here";
+</script>
+</html>

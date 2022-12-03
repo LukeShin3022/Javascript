@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q3</title>
+</head>
+<body>
+    <input type="text" placeholder="Write position(unshift or push)"/>
+    <input type="text" placeholder="Write Item"/>
+    <button type="button">Insert</button>
+    <ul>
+
+    </ul>
+</body>
+<script>
+    const Q3_Add_Item = function(position,item,input_Array){
+        switch(position){
+            case "unshift":
+                inputArray.unshift(item);
+                break;
+            case "push":
+                inputArray.push(item);
+                break;
+        }
+        return input_Array;
+    }
+    const inputArray = [0,1,2,3,4,5,6,7];
+    let input = document.querySelectorAll("input");
+    let button = document.querySelector("button");
+    let ul = document.querySelector("ul");
+    button.addEventListener('click',function(event){
+        let result = Q3_Add_Item(input[0].value,input[1].value,inputArray);
+        const br = document.createElement("br");
+        for(let i = 0; i < result.length; i ++){
+            const li = document.createElement("li");
+            li.innerText = result[i];
+            ul.appendChild(li);
+        }
+        ul.appendChild(br);
+
+    })
+</script>
+</html>

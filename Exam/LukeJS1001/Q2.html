@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q2</title>
+</head>
+<body>
+    <ul>
+    </ul>
+</body>
+<script>
+    const Q2_Display_Array = function(title){
+        let disPlay = [];
+        let foodArray = ["pizza", "hambuger", "bibimbob", "kimchi", "waffle"];
+        let carArray = ["911", "bugatti", "lamborgini", "488 spider"];
+        switch(title){
+        case "food":
+            display = foodArray;
+            break;
+        case "car":
+            display = carArray;
+            break;
+        default :
+            display = ["none"];
+       }
+       return display;
+    }
+
+    let disPlay = Q2_Display_Array("food");
+    let ul = document.querySelector("ul");
+    for(let i = 0; i < disPlay.length; i ++){
+        const li = document.createElement("li");
+        li.innerText = disPlay[i];
+        ul.appendChild(li);
+    }
+
+</script>
+</html>

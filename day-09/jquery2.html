@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        .box1{
+            margin-top: 10px;
+            border: 3px solid blue;
+            height: 400px;
+            position: relative;
+        }
+        .movingBox{
+            background-color: yellow;
+            width: 50px;
+            height: 50px;
+            left: 80%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <a class="btn" href="#">Show me</a>
+    <a class="btn" href="#">FADE ME</a>
+    <a class="btn" href="#">slide toggle</a>
+    <a class="btn" href="#">slide</a>
+    <a class="btn" href="#">move ME</a>
+    <div class="box">
+        <p>
+            just a simple text
+        </p>
+    </div>
+    <br>
+    <div class="box1">
+        <div class="movingBox">
+
+        </div>
+    </div>
+    <input name="fname" />
+    <input name="lname" />
+    <input name="address" />
+    <!-- <input /> -->
+</body>
+<script>
+    $($(".btn")[0]).on("click",function(){
+        $(".box"). toggle("slow");
+        $(this).toggleClass("btnOpen");
+    });
+
+    $($(".btn")[1]).on("click",function(){
+        $(".box").fadeToggle("slow");
+    })
+    $($(".btn")[2]).on("click",function(){
+        $(".box").slideToggle(1000);
+    })
+    $($(".btn")[3]).on("click",function(){
+        $(".box").slideDown("slow").slideUp(1000);
+    })
+    $($(".btn")[4]).on("click",function(){
+        $(".movingBox").animate({left:'300px'})
+    })
+    // $("input").on("focus",function(e){
+    //     $(e.target).css("background-color","yellow");
+    // });
+    // $("input").on({
+    //     focus:function(e){
+    //         $(e.target).css("background-color","red");
+    //     },
+    //     blur:function(e){
+    //         $(e.target).css("border","1px solid red");
+    //         $(e.target).css("background-color","white");
+    //     }
+    // });
+    $("input").on({
+        keydown:function(e){
+            if($(e.target).attr("name") == "fname" || $(e.target).attr("name") == "lname"){
+                if((e.keyCode < 65 || e.keyCode > 90) && (e.keyCode != 8 && e.keyCode != 32)){
+                    e.preventDefault();
+                } 
+            }
+        }
+    })
+
+</script>
+</html>

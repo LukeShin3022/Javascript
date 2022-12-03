@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        table{
+            border-collapse: collapse;
+        }
+        td{
+            border: 1px solid black;
+            padding: 12px;
+            font-size: 24px;
+        }
+        .duplicated{
+            background-color: red;
+            border: 3px solid red;
+            color: white;
+        }
+        .a{
+            border-right: 3px solid salmon;
+        }
+        .b{
+            border-left: 3px solid salmon;
+        }
+        .c{
+            border-bottom: 3px solid salmon;
+        }
+        .d{
+            border-top: 3px solid salmon;
+        }
+    </style>
+</head>
+<body>
+    <table>
+
+    </table>
+    <table class="result">
+
+    </table>
+    <button type="button">Validate</button>
+</body>
+<script>
+    let size, values, validate_arr, n;
+    let valiBtn = document.querySelector("button");
+    let flag = false;
+
+    let tablePop = (values) => {
+        const table = document.querySelector("table");
+        table.className = "ogTable";
+        for(let rowIdx in values){
+            let tr = document.createElement("tr");
+            for(let colIdx in values[rowIdx]){
+                let td = document.createElement("td");
+                if(colIdx == n*n-1){
+                    td.className += " a";
+                }
+                if((colIdx%n) == 0){
+                    td.className+= " b";
+                }
+                if(rowIdx == n*n-1){
+                    td.className += " c";
+                }
+                if((rowIdx%n) == 0){
+                    td.className += " d";
+                }
+                td.innerHTML = values[rowIdx][colIdx];
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        }
+    }
+
+    let checkBox = (value,row,col) => {
+        const stRow = row - (row % n), stCol = col - (col % n);
+        for (let i = stRow; i < stRow + n; i++) {
+            for (let j = stCol; j < stCol + n; j++) {
+                if (i !== row || j !== col) {
+                    if (values[i][j] === value) {
+                        validate_arr[i][j]=1;
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    let checkRowColumn = (value,row,col)=>{
+        for(let i=0; i < n*n; i++){
+            if(i!== col){
+                if(values[row][i] === value){
+                    validate_arr[row][i] = 1;
+                }
+            }
+
+            if(i!== row){
+                if(values[i][col] === value){
+                    validate_arr[i][col] = 1;
+                }
+            }
+        }
+        
+    }
+
+    let validates = () => {
+        for (let row = 0; row < n*n; row++){
+            for(let col = 0; col < n*n; col++){
+                checkRowColumn(values[row][col],row,col); // create function validating row and column 
+                checkBox(values[row][col],row,col);
+            }
+        }
+    }
+    let drawColor = (values) => {
+        const table = document.querySelector(".result");
+        const ogTable = document.querySelector(".ogTable");
+        ogTable.remove();
+        for(let rowIdx in values){
+            let tr = document.createElement("tr");
+            for(let colIdx in values[rowIdx]){
+                let td = document.createElement("td");
+                if(colIdx == n*n-1){
+                    td.className += " a";
+                }
+                if((colIdx%n) == 0){
+                    // console.log("hi");
+                    td.className+= " b";
+                }
+                if(rowIdx == n*n-1){
+                    td.className += " c";
+                }
+                if((rowIdx%n) == 0){
+                    td.className += " d";
+                }
+                td.innerHTML = values[rowIdx][colIdx];
+                if(validate_arr[rowIdx][colIdx] === 1){
+                    td.className = "duplicated";
+                }
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        }
+    }
+    
+    let loadJson = () =>{
+        const xmlHTTP = new XMLHttpRequest();
+        xmlHTTP.onload = function(){
+            let output = JSON.parse(this.responseText)[0];
+            size = output.size;
+            values = output.values;
+            n = Math.sqrt(size);
+            tablePop(values);
+        }
+        xmlHTTP.open("GET","./source.json",true);
+        xmlHTTP.send();
+    }
+    
+    loadJson();
+    valiBtn.addEventListener('click',function(){
+        validate_arr = Array.from(Array(size), () => Array(size).fill(0));
+        validates();//excute validation function.
+        drawColor(values);
+    });
+    
+</script>
+</html>

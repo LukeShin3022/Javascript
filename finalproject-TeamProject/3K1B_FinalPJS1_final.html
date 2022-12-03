@@ -1,0 +1,366 @@
+<!-- LUKE -->
+<!-- TINA -->
+<!-- EDEN -->
+<!-- MARCELO -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"
+    ></script>
+    <title>Document</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+      :root {
+        --mainYellow: #f7b222;
+        --brownYellow: #bf8300;
+        --brownw: #cd9e39;
+      }
+      /* Sanitize */
+      * {
+        padding: 0%;
+        margin: 0%;
+        font-family: 'Poppins', sans-serif;
+      }
+      *:hover {
+        cursor: default;
+      }
+      /* Body */
+      body {
+        display: flex;
+        flex-direction: column;
+        row-gap: 3vh;
+        background-image: linear-gradient(
+          45deg,
+          white,
+          whitesmoke,
+          gainsboro,
+          whitesmoke,
+          white
+        );
+      }
+      body > main,
+      body > footer {
+        margin: 0% 5%;
+      }
+      /* Header */
+      header {
+        background-color: var(--mainYellow);
+        border-bottom: 5px solid white;
+        border-radius: 0em 0em 1em 1em;
+        height: 15vh;
+      }
+      header > section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        row-gap: 3vh;
+      }
+      header h1 {
+        font-size: 40px;
+      }
+      /* Main */
+      main {
+        display: flex;
+        flex-direction: column;
+        row-gap: 5vh;
+        position: relative;
+      }
+      /* Sudoku */
+      .sudoku {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 3vh;
+      }
+      table {
+        background-color: var(--brownYellow);
+        border: 5px solid var(--mainYellow);
+        border-collapse: collapse;
+        box-shadow: 1px 1px 60px grey;
+      }
+      td {
+        border: 1px solid var(--mainYellow);
+        padding: 5px 15px;
+        font-size: 24px;
+        text-align: center;
+      }
+      td:hover {
+        cursor: pointer;
+      }
+      .duplicated {
+        background-color: red;
+        color: white;
+        font-weight: 600;
+      }
+      .solved {
+        display: none;
+        position: absolute;
+        font-family: cursive;
+        font-size: 2.5em;
+        bottom: 0;
+        left: 25%;
+        transform: rotate(5deg);
+        text-shadow: 5px 5px white;
+      }
+      .s {
+        left: 60%;
+        transform: rotate(-5deg);
+      }
+      .sudoku > aside {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 5vh;
+        width: 100%;
+      }
+      button {
+        border: 4px solid var(--brownYellow);
+        border-radius: 1em;
+        background-color: var(--mainYellow);
+        padding: 0.5em 1em;
+        font-weight: 600;
+        font-size: 100%;
+      }
+      button:hover {
+        cursor: pointer;
+        background-color: var(--brownYellow);
+        border-color: var(--mainYellow);
+      }
+      button:disabled {
+        color: black;
+      }
+      /* Team */
+      .team {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 8vh;
+        background-image: linear-gradient(
+          45deg,
+          var(--mainYellow),
+          var(--brownYellow)
+        );
+        position: relative;
+        border-radius: 5px;
+      }
+      .team > aside {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 50%;
+        height: 40%;
+      }
+      .team span {
+        color: black;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 300ms;
+      }
+      /* Footer */
+      footer > article {
+        margin-top: 2%;
+        background-color: black;
+        color: white;
+        padding: .5%;
+        text-align: center;
+        margin-bottom: 1vh;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <section>
+        <h1>3K1B</h1>
+      </section>
+    </header>
+    <!-- Main -->
+    <main>
+      <div class="solved">Sudoku</div>
+      <div class="solved s">Solved!</div>
+      <!-- Sudoku -->
+      <section class="sudoku">
+        <table></table>
+        <aside>
+          <button type="button">Validate...</button>
+        </aside>
+      </section>
+    </main>
+    <!-- Footer -->
+    <footer>
+      <section class="team">
+        <aside>
+          <span>Luke</span>
+          <span>Eden</span>
+          <span>Tina</span>
+          <span>Marcelo</span>
+        </aside>
+      </section>
+      <article>Copyright 2022. Team 3K1B. all rights reserved.</article>
+    </footer>
+  </body>
+  <script>
+    let size, values, validate_arr, n
+    let valiBtn = document.querySelector('button')
+    let flag = false
+    let tablePop = values => {
+      const table = document.querySelector('table')
+      for (let rowIdx in values) {
+        let tr = document.createElement('tr')
+        for (let colIdx in values[rowIdx]) {
+          let td = document.createElement('td')
+          let color = '#f7b222'
+          function borderColor(position) {
+            return $(td).css(`border-${position}`, `5px solid ${color}`)
+          }
+          if (colIdx == n * n - 1) {
+            borderColor('right')
+          }
+          if (colIdx % n == 0) {
+            borderColor('left')
+          }
+          if (rowIdx == n * n - 1) {
+            borderColor('bottom')
+          }
+          if (rowIdx % n == 0) {
+            borderColor('top')
+          }
+          td.innerHTML = values[rowIdx][colIdx]
+          td.setAttribute('onclick', 'checkDuplicatedNum(this, values)')
+          tr.appendChild(td)
+        }
+        table.appendChild(tr)
+      }
+    }
+    let checkBox = (value, row, col) => {
+      const stRow = row - (row % n),
+        stCol = col - (col % n)
+      for (let i = stRow; i < stRow + n; i++) {
+        for (let j = stCol; j < stCol + n; j++) {
+          if (i !== row || j !== col) {
+            if (values[i][j] === value) {
+              validate_arr[i][j] = 1
+              return false
+            }
+          }
+        }
+      }
+      return true
+    }
+    let checkRowColumn = (value, row, col) => {
+      for (let i = 0; i < n * n; i++) {
+        if (i !== col) {
+          if (values[row][i] === value) {
+            validate_arr[row][i] = 1
+          }
+        }
+        if (i !== row) {
+          if (values[i][col] === value) {
+            validate_arr[i][col] = 1
+          }
+        }
+      }
+    }
+    let validates = () => {
+      for (let row = 0; row < n * n; row++) {
+        for (let col = 0; col < n * n; col++) {
+          checkRowColumn(values[row][col], row, col) // create function validating row and column
+          checkBox(values[row][col], row, col)
+        }
+      }
+    }
+    let drawColor = values => {
+      const table = document.querySelector('table')
+      for (let rowIdx in values) {
+        let tr = document.createElement('tr')
+        for (let colIdx in values[rowIdx]) {
+          let td = document.createElement('td')
+          let color = '#f7b222'
+          function borderColor(position) {
+            return $(td).css(`border-${position}`, `5px solid ${color}`)
+          }
+          if (colIdx == n * n - 1) {
+            borderColor('right')
+          }
+          if (colIdx % n == 0) {
+            borderColor('left')
+          }
+          if (rowIdx == n * n - 1) {
+            borderColor('bottom')
+          }
+          if (rowIdx % n == 0) {
+            borderColor('top')
+          }
+          td.innerHTML = values[rowIdx][colIdx]
+          td.setAttribute('onclick', 'checkDuplicatedNum(this, values)')
+          if (validate_arr[rowIdx][colIdx] === 1) {
+            $(td).addClass('duplicated')
+          }
+          tr.appendChild(td)
+        }
+        table.appendChild(tr)
+      }
+    }
+    function checkDuplicatedNum(tdObj, values) {
+      let pick = document.getElementsByTagName('td')
+      for (let rowIdx = 0; rowIdx < size * size; rowIdx++) {
+        let color = '#cd9e39'
+        if (pick[rowIdx].innerText == tdObj.innerText) {
+          pick[rowIdx].style.backgroundColor = '#ffd409'
+        } else {
+          $(pick[rowIdx]).hasClass('duplicated')
+            ? (pick[rowIdx].style.backgroundColor = 'red')
+            : (pick[rowIdx].style.backgroundColor = '#bf8300')
+        }
+        $(tdObj).parent().children().css('backgroundColor', color)
+        $(pick[rowIdx]).index() == $(tdObj).index()
+          ? (pick[rowIdx].style.backgroundColor = color)
+          : null
+        setTimeout(function () {
+          if ($(pick[rowIdx]).hasClass('duplicated')) {
+            pick[rowIdx].style.backgroundColor = 'red'
+          } else {
+            document.querySelectorAll('td')[rowIdx].style.backgroundColor =
+              '#bf8300'
+          }
+        }, 5000)
+      }
+    }
+    let loadJson = () => {
+      const xmlHTTP = new XMLHttpRequest()
+      xmlHTTP.onload = function () {
+        let output = JSON.parse(this.responseText)[0]
+        size = output.size
+        values = output.values
+        n = Math.sqrt(size)
+        tablePop(values)
+      }
+      xmlHTTP.open('GET', './source.json', true)
+      xmlHTTP.send()
+    }
+    loadJson()
+    valiBtn.addEventListener('click', function () {
+      validate_arr = Array.from(Array(size), () => Array(size).fill(0))
+      $('tr').remove()
+      $(valiBtn).attr('disabled', 'true')
+      $(valiBtn).text('Validated!')
+      validates() //excute validation function.
+      drawColor(values)
+      if (!$('td').hasClass('duplicated')) {
+        if (!document.querySelectorAll('td').length <= 0) {
+          $('.solved').show()
+        }
+      }
+    })
+  </script>
+</html>

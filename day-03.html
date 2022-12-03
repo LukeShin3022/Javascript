@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2></h2>
+    <h3>Odd Numbers</h3>
+    <ul>
+
+    </ul> 
+    <h3>Even Numbers</h3>
+    <ul>
+
+    </ul>
+</body>
+<script>
+    let numbers =[];
+    let odd="";
+    let even="";
+    let list = document.getElementsByTagName("ul");
+    for(let i = 0; i < 10; i++){
+        numbers[i]=Math.floor((Math.random()*(1000-1)+1));
+        console.log(numbers[i]);
+    }
+    // write a progran with for loop to find the add and even numbers
+    for(let i = 0; i<numbers.length; i++){
+        if(numbers[i]%2 == 0){
+            even += numbers[i]+" ";
+            list[1].innerHTML+="<li>"+numbers[i]+"</li>";
+        }else{
+            odd += numbers[i]+" "
+            list[0].innerHTML+="<li>"+numbers[i]+"</li>";
+        }
+    }
+    console.log("Even Numbers: "+even+", Odd Numbers: "+odd);
+
+
+////////////////////////////////////////////////////////////////////////
+//Array to string Method
+    let names = ["a","b","c","d","e","f"];
+    let names2 = ["a","b","c","d","e","f"];
+    let strnames = names.toString();//to convet into string
+    let join = names.join(":");//convert to string using a define saperator
+    let shift = names.shift();//removing first item in array
+    let pop = names.pop();//removing last item in array
+    let push = names.push("g");//add a item to the end of array
+    let unshift = names.unshift("h","i");//add a items to the first of array
+    let concat = names.concat(names2);//return a merge of two/more array
+    let splice= names.splice(2,1,"d");
+    let splice2= names.splice(2,1,names2);
+    console.log(strnames);
+    console.log(names);
+
+
+    //////////////////////////////////////////////////////////////////////
+    let student ={
+        fname:"Lucas",
+        country:"Brazil",
+        byear:"1920",
+        program:"Web development",
+        course:"Java Script"
+    }
+    let h2 = document.getElementsByTagName("h2")[0];
+    h2.innerHTML = `${student.fname} from ${student.country} is studing ${student.program}`;
+    let list2 = document.getElementsByTagName("ul")[0];
+    for(let property in student){
+        list2.innerHTML+= `<li> ${student[property]}</li>`
+    }
+</script>
+</html>

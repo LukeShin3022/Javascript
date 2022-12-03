@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>Document</title>
+
+    <style>
+        *{
+            position: relative;
+        }
+        .box{
+            background-color: salmon;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: .4s;
+            margin-top: 5%;
+            border-radius: 5px;
+            position: absolute;
+            left: 10%;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+</body>
+<script>
+
+    $(document).keydown(function(e){
+        // console.log(selected);
+        let key = e.keyCode;
+        let selectedBox = $(".box").offset();
+        let leftV = selectedBox.left;
+        let topV = selectedBox.top;
+        console.log(key);
+        switch(key){
+            case 37 :
+                // leftV -= 10;
+                    $(".box").animate({left:"-=10px"},0);
+                break;
+
+            case 38 :
+                console.log(topV);
+                topV -= 10;
+                    $(".box").animate({top:"-=10px"});
+                break;
+
+            case 39 :
+                leftV += 10;
+                    $(".box").animate({left:leftV});
+                break;
+
+            case 40:
+                console.log(topV);
+                topV += 10;
+                    $(".box").animate({top:topV}); 
+                break;
+        }
+   
+    })
+</script>
+</html>

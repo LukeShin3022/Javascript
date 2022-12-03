@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function caculator(num1,num2,operator){
+        switch(operator){
+            case "+":
+                return num1 + num2;
+                break;
+            case "-":
+                return num1 - num2;
+                break;
+            case "*":
+                return num1 * num2;
+                break;
+            case "/":
+                return num1 / num2;
+                break;
+            case "%":
+                return num1 % num2;
+                break;
+        }
+    }
+    let num1 = 1;
+    let num2 = 3;
+    let operator = "/";
+    let result = Math.floor(caculator(num1,num2,operator));
+    console.log(result);
+    alert(num1+operator+num2+"="+result);
+    //create a function and name it "caculator". this function should takes 3 parameters, (operator,num1, num2). Operator can be either of "+ - * / %". using the operator and two numbers display the result inside an alert box.
+</script>
+</html>

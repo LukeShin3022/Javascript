@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q4</title>
+</head>
+<body>
+    <ul></ul>
+    <ul></ul>
+</body>
+<script>
+    const Q4_Array_Cleaner=function(inputArray){
+        // let firstArray = inputArray;
+        let finalArray = [];
+        
+        for(let i = 0; i<inputArray.length; i++){
+                console.log(inputArray[i]);
+                // console.log(finalArray.length);
+                if (finalArray.length == 0){
+                    console.log("comein"+i);
+                    finalArray.push(inputArray[i]);
+                }
+            for(let j = 0; j < finalArray.length; j++){
+                console.log("i="+i);
+                if(finalArray[j]!=inputArray[i]){
+                    console.log(finalArray[j]+"=="+inputArray[i]);
+                    finalArray.push(inputArray[i]);
+                    break;
+                }else{
+
+                }
+            }
+        }
+
+        return finalArray;
+    }
+
+    const input_Array=["A","F","F","C","D","D"];
+    const ul = document.querySelectorAll("ul");
+    let result = Q4_Array_Cleaner(input_Array);
+
+    for(let i = 0; i < input_Array.length; i ++){
+            const li = document.createElement("li");
+            li.innerText = input_Array[i];
+            ul[0].appendChild(li);
+    }
+
+    for(let j = 0; j < result.length; j++){
+            const li = document.createElement("li");
+            li.innerText = result[j];
+            ul[1].appendChild(li);
+    }
+
+</script>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+
+    </h1>
+    <h1>
+
+    </h1>
+</body>
+<script>
+    function students(firstName, lastName, country, bdate, program){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.country = country;
+        this.bdate = bdate;
+        this.program = program;
+        this.displayDetails = function(){
+            return `First Name:${this.firstName}</br>Last Name:${this.lastName}</br>From:${this.country}</br>Birth Year:${this.bdate}`;
+        }
+    }
+    const Samridh = new students("Samridh","Ogata", "UAE","2015","Web development");
+    const Taka = new students("Takahiro","Ogata","Japan","1951","Digital Marketing");
+    console.log(Samridh);
+    console.log(Taka);
+    let h1 = document.getElementsByTagName("h1")[0];
+    h1.innerHTML = Taka.displayDetails();
+    document.getElementsByTagName("h1")[1].innerHTML = Samridh.displayDetails();
+</script>
+</html>

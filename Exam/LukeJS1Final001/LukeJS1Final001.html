@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="emDetails" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div class="m-content">
+
+          </div>
+        </div>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Gender</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                    <th>Option</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    let employeeData = new Map();
+    let department = [
+        {val:'le',txt:'Leagal'},
+        {val:'ma',txt:'Marketing'},
+        {val:'js1',txt:'JavaSciprt Basic'},
+        {val:'js2',txt:'JavaSciprt Advance'},
+        {val:'php',txt:'Back-End with PHP'},
+        {val:'cms',txt:'Content Managment System'}
+    ];
+    const LukeObj = function(id,first_name, last_name , email, phone, gender, position, department, salary){ //1st Question
+        this.id = id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.phone = phone;
+        this.gender = gender;
+        this.position = position;
+        this.department = department;
+        this.salary = parseFloat(salary);
+
+    }
+    function tablePoper(){ //3rd Question
+        $.each(employeeData,function(idx,value){
+            let tr = $('<tr></tr>');
+            let fnameTd = $(`<td>${value.first_name}</td>`);
+            let lnameTd = $(`<td>${value.last_name}</td>`);
+            let emailTd = $(`<td>${value.email}</td>`);
+            let phoneTd = $(`<td>${value.phone}</td>`);
+            let genderTd = $(`<td>${value.gender}</td>`);
+            let positionTd = $(`<td>${value.position}</td>`);
+            let departTd = $(`<td>${value.department}</td>`);
+            let salaryTd = $(`<td>${value.salary}</td>`);
+            let editBtn = $(`<button>Edit</button>`);
+            editBtn.addClass("edit");
+            tr.append(fnameTd,lnameTd,emailTd,phoneTd,genderTd,positionTd,departTd,salaryTd,editBtn);
+            $('tbody').append(tr);
+            editBtn.click(function(event){
+                modalContent(idx,value);
+                $('#emDetails').fadeIn('slow');
+            })
+        })
+    }
+    function modalContent(idx,emDetails){
+        let mCont = $('#emDetails .m-content');
+        mCont.children().remove();
+        mCont.append(`<h3>Name: ${emDetails.first_name} ${emDetails.last_name}</h3>`);
+        mCont.append(`<h3>Email: ${emDetails.email}</h3>`);
+        mCont.append(`<h3>Position: ${emDetails.position} | Department: ${emDetails.department}</h3>`);
+        let div = $('<div></div>');
+        let delButton = $('<button>Delete</button>');
+        let select = $('<select></select>');
+        $.each(department,function(idx,val){
+            select.append(`<option value='${val.val}'>${val.txt}</option>`);
+        })
+        mCont.append(select);
+        $.each(emDetails,function(idx,value){
+                let inputBox = $('<input></input>');
+                switch(idx){
+                    case 'salary':
+                        div.append("Salary: ");
+                        mCont.append(div);
+                        inputBox.addClass("salaryIn");
+                        inputBox.val(`${emDetails.salary}`);
+                        $('.m-content div').append(inputBox);
+                        break;
+                    case 'phone':
+                        div.append("Phone: ");
+                        mCont.append(div);
+                        inputBox.addClass("phoneIn");
+                        inputBox.val(`${emDetails.phone}`);
+                        $('.m-content div').append(inputBox);
+                        break;
+                        
+                    case 'gender':
+                        div.append("Gender: ");
+                        mCont.append(div);
+                        inputBox.addClass("genderIn");
+                        inputBox.val(`${emDetails.gender}`);
+                        $('.m-content div').append(inputBox);
+                        break;
+                }
+
+        })
+        mCont.append(delButton);
+        $('button').click(function(event){
+            $($('tbody tr')[idx]).remove();
+        })
+
+
+
+
+        
+    }
+    $.getJSON('./data/employeeData_js1.json',function(data){ // 2nd Question
+        employeeData = data;
+        tablePoper();
+    });
+    $('#emDetails .close').click(function(event){
+        $('#emDetails').fadeOut('slow');
+    })
+</script>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .test{
+            background-color: aqua;
+        }
+        .names{
+            border: solid 1px;
+            padding: 2px 10px;
+        }
+    </style>
+</head>
+<body>
+    <img src="./img/cf.avif" style="width:25%; height:25%;" alt="canadaFlag"/>
+    <button type="button" onclick="chFlag()">Change flag</button> 
+    <div class="names">
+
+    </div>  
+    <input placeholder="write your first name"/>
+    <input placeholder="write your last name"/>
+    <button type="button" onclick="addName();">Add</button>
+</body>
+<script>
+    function addName(){
+        let names = document.querySelectorAll("input");
+        // let textNode = document.createTextNode(`Full name:${names[0].value} ${names[1].value}`);
+        let h2 = document.createElement("h2");
+        let italic = document.createElement("i");
+        italic.innerText = `Full name:${names[0].value} ${names[1].value}`;
+        h2.appendChild(italic);
+        h2.style.backgroundColor = "Yellow";
+        // h2.appendChild(textNode);
+        document.querySelector("div").appendChild(h2);
+    }
+    function chFlag(){
+        let img = document.querySelector("img");
+        console.log(img.alt);
+        switch(img.alt){
+            case "canadaFlag":
+                img.src = "./img/irf.png";
+                img.alt = "iranFlag";
+                break;
+            case "iranFlag":
+                img.src = "./img/cf.avif";
+                img.alt = "canadaFlag";
+                break;
+        }
+    }
+</script>
+</html>

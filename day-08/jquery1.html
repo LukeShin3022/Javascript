@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1 class="title">Hello world</h1>
+    <h1 class="test">hello world 2</h1>
+    <input class="ipt" type="text">
+    <button class="btn">click</button>
+</body>
+<script>
+    let h1 = $("h1");
+    // h1[0].innerText += " Jquery";
+    console.log($(h1[0]).text($(h1[0]).text()+" something"));
+    $(h1[0]).attr("id","angel");
+    console.log(h1.attr("class"));
+
+    $(".btn").on('click',function(){
+        if($(".ipt").attr("type") == "text"){
+            $(".ipt").attr("type","password");
+        }else{
+            $(".ipt").attr("type","text");
+        }
+    })
+</script>
+</html>

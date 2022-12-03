@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        .children{
+            background-color: salmon;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: .4s;
+            margin-top: 5%;
+            border-radius: 5px;
+            position: relative;
+        }
+        .children:hover{
+            background-color: lightpink;
+        }
+        .selected{
+            background-color: crimson;
+        }
+        #parent{
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <button type="button">ADD BOX</button>
+    <button type="button" disabled>Remove Box</button>
+    <button type="button" disabled>UP</button>
+    <button type="button" disabled>DOWN</button>
+    <div id="parent">
+
+    </div>
+    
+</body>
+<script>
+    let selected = null;
+    let num = 0;
+    $(document).keydown(function(e){
+        let key = e.keyCode;
+        let selectedBox = $(selected).offset();
+        let leftV = $(selected).offset().left;
+        let topV = $(selected).offset().top;
+        let pLeft = innerWidth;
+        console.log(pLeft);
+        // let p
+
+        switch(key){
+            case 37 : //Left
+                    leftV -= 10;
+                    $(selected).offset({left:leftV});
+                break;
+            case 38 : //Up
+                    topV -= 10;
+                    $(selected).offset({top:topV});
+                break;
+            case 39 ://Right
+                    leftV += 10;
+                    $(selected).offset({left:leftV});
+                break;
+            case 40 ://Down
+                    topV += 10;
+                    $(selected).offset({top:topV});
+                break;
+        }
+   
+    });
+    function optionSt(flag, item){
+        if(item != null){
+            $($("button")[1]).attr("disabled",flag);
+            $($("button")[2]).attr("disabled",flag);
+            $($("button")[3]).attr("disabled",flag);
+            selected = item;
+        }else{
+            $($("button")[1]).attr("disabled",flag);
+            $($("button")[2]).attr("disabled",flag);
+            $($("button")[3]).attr("disabled",flag);
+            selected = null;
+        }
+    }
+    $($("button")[0]).on("click",function(){
+        let box = $("<div></div>");
+        num ++;
+        box.addClass("children");
+        // box.text(num);
+        box.append(`<p>`+num+`</p>`);
+        box.click(function(){
+            console.log($("#parent").children().first());
+            // console.log($(this).parent()); //to get the parent object
+            // console.log($(this).siblings());//get all other siblings
+            // console.log($(this).next());
+            // console.log($(this).prev());;
+            // console.log($(this).nextAll());
+            // console.log($(this).prevAll());
+            // $(this).addClass("selected");
+            if(this == selected){
+                $(this).removeClass("selected");
+                // selected = null;
+                // $($("button")[1]).attr("disabled",true);
+                optionSt(true,null);
+            }else{
+                $(".children").removeClass("selected");
+                $(this).toggleClass("selected");
+                // selected = this;
+                optionSt(false,this);
+                // $($("button")[1]).attr("disabled",false);
+            }
+            
+        });
+        if(selected != null){
+            $(selected).after(box);
+        }else{
+            $("#parent").append(box);
+            // $("#parent").prepend(box);
+        }
+        $($("button")).on("click",function(){
+            switch($(this).text()){
+                case "UP":
+                        if($(selected).children().first()[0] == selected){
+                            $(selected).children().last().after(selected);                            
+                        }else{
+                            $(selected).prev().before(selected);
+                        }
+                    break;
+                case "DOWN":
+                        if($(selected).children().last()[0] == selected){
+                            $(selected).children().first().before(selected);
+                        }else{
+                            $(selected).next().after(selected);
+                        }
+                    break;
+            }
+        })
+    });
+    $($("button")[1]).on("click",function(){
+        $(selected).remove();
+        selected = null;
+        $($("button")[1]).attr("disabled",true);
+    });
+</script>
+</html>

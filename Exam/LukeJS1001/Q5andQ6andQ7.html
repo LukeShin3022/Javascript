@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q5</title>
+</head>
+<body>
+    <input placeholder="Write Name"/>
+    <input type="number" placeholder="number of Qyn"/>
+    <input type="text" placeholder="wirte Price"/>
+    <button id="addBtn" type="button">Add</button>
+    <table>
+        <thead>
+            <tr>
+                <th>ItemCode</th>
+                <th>Item Name</th>
+                <th>QYN</th>
+                <th>Price</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" align="right">Total Price:</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+    <h3></h3>
+</body>
+<script>
+    let currency = new Intl.NumberFormat('en-US',{//Convert the number to currency
+        style:'currency',
+        currency:'CAD'
+    })
+    const itemList = new Map();
+    const addBtn = document.querySelector("#addBtn");
+    let inputs = document.querySelectorAll("input");
+    const Sold_item = function(ItemCode,Name,qyn,price){// Sold Item Object
+        this.ItemCode = ItemCode;
+        this.Name = Name;
+        this.qyn = parseInt(qyn);
+        this.price = parseFloat(price);
+        
+        this.TablePop = function(){ // A function that tables the values entered in input-tag
+            const tr = document.createElement("tr");
+            const tbody = document.querySelector("tbody");
+            for(let prName in this){
+                if(typeof this[prName] != "function"){
+                    const td = document.createElement("td");
+                    (prName == "price") ? td.innerText = currency.format(this[prName]):
+                    td.innerText = this[prName];
+                    tr.appendChild(td);
+                }
+            }
+            const tdOption = document.createElement("td");
+            tdOption.appendChild(this.delBtn(this.ItemCode));
+            tr.appendChild(tdOption);
+            tbody.appendChild(tr);
+        };
+        this.delBtn = function(id){
+            const button = document.createElement("button");
+            button.innerText = "Delete";
+            button.addEventListener('click', function(event){
+                let selectedTr = event.target.parentNode.parentNode;
+                selectedTr.parentNode.removeChild(selectedTr);
+                itemList.delete(id);
+                calTotlaSal();
+            })
+            return button;
+        }
+
+    }
+    function calTotlaPrice(){// Calculate the total price in the Sold_Item
+        const totalTd = document.querySelector("tfoot tr").lastElementChild;
+        let sum = 0;
+        itemList.forEach(function(item,id){
+            sum += item.price;// Sum of price of the items
+        });
+        totalTd.innerHTML = currency.format(sum);
+    }
+
+    function Cal_TotalSale(itemList){
+        const totalH3= document.querySelector("h3");
+        let totalSale = 0;
+        itemList.forEach(function(item,id){
+            totalSale += (item.price*item.qyn);//
+        });
+        totalH3.innerText = "TotalSale: " + currency.format(totalSale);
+
+    }
+
+    addBtn.addEventListener('click',function(event){
+        let id;
+        id = 1000 + itemList.size;
+        while(true){
+            if(itemList.has(id)){
+                id++;
+            }else{
+                break;
+            }
+        }
+      
+        let newItem = new Sold_item(id,inputs[0].value,inputs[1].value,inputs[2].value);
+        itemList.set(id,newItem);
+        newItem.TablePop();
+        calTotlaPrice();
+        Cal_TotalSale(itemList);
+        
+    });
+
+</script>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+
+    </ul>
+</body>
+<script>
+
+    function Show(){
+        let singer = ["Sam","Milad","Marcelo","Jay","Jun"];
+        let myinfo ={
+            fname:"Luke",
+            lname:"Shin",
+            favSinger: singer
+        }
+        return myinfo;
+    }
+
+    // console.log(Show().fname + Show().lname + Show.favSinger);
+    let list=document.getElementsByTagName("ul")[0];
+    list.innerHTML="<li>"+Show().fname+"</li>";
+</script>
+</html>

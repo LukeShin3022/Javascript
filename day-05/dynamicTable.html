@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+        <li>Coffee</li>
+        <li>Tea</li>
+        <li>Coke</li>
+        <li>Monster</li>
+        <li>Milk</li>
+        <li>Water</li>
+        <li>Monster</li>
+        <li>Milk</li>
+        <li>Water</li>
+    </ul>
+    <input placeholder="write your name"/>
+    <input placeholder="write your last name"/>
+    <input placeholder="write student's grade"/>
+    <button type="button" onclick="addStudent()">Add</button>
+    <table>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Grade</th>
+        </tr>
+    </table>
+</body>
+<script>
+    let tmpElement = document.createElement("li");
+    tmpElement.innerText = "Milk Tea";
+    let list = document.querySelector("ul");
+    let middle = Math.round(list.children.length / 2)-1;
+    list.children[middle].style.backgroundColor = "yellow";
+    list.firstElementChild.style.backgroundColor = "red";
+    list.insertBefore(tmpElement,list.firstElementChild);
+    list.lastElementChild.style.backgroundColor = "red";
+    // list.removeChild(list.children[6]);
+    list.addEventListener('click',function(event){
+        for(let idx in list.children){
+            if(list.children[idx] == event.target){
+                // alert(event.target.innerText+` index: ${idx}`);
+                list.removeChild(list.children[idx]);
+                break;
+            }
+        }
+    })
+    const studentObj = function(fName,lName,grade){
+        this.fName = fName;
+        this.lName = lName;
+        this.grade = parseFloat(grade);
+        this.populateTR=function(){
+            let tr = document.createElement("tr");
+            let tdFname = document.createElement("td");
+            let tdLname = document.createElement("td");
+            let tdGrade = document.createElement("td");
+            let tdDel = document.createElement("td");
+            tdFname.innerText = this.fName;
+            tdLname.innerText = this.lName;
+            tdGrade.innerText = this.grade;
+            let delBtn = document.createElement("button");
+            delBtn.type = "button";
+            delBtn.innerText = "Delete";
+            delBtn.addEventListener("click",function(event){
+                let selectedTr = event.target.parentNode.parentNode;
+                let delKey = selectedTr.firstElementChild.innerText;
+                studentList.delete(delKey);
+                // document.querySelectorAll
+            });
+            tdDel.appendChild(delBtn);
+            tr.appendChild(tdFname);
+            tr.appendChild(tdLname);
+            tr.appendChild(tdGrade);
+            tr.appendChild(tdDel);
+            return tr;
+        }
+    }
+    let studentList = new Map();
+    function findMax(){
+        let max = 0;
+        studentList.forEach(function(student,stName){
+            // console.log(student);
+            if(max<student.grade){
+                max = student.grade;
+            }
+        })
+        return max;
+    }
+
+    function addStudent(){
+        let stName = document.querySelectorAll("input");
+        let newstudent = new studentObj(stName[0].value,stName[1].value,stName[2].value);
+        studentList.set(newstudent.fName,newstudent);
+        document.querySelector("table").appendChild(newstudent.populateTR());
+        console.log(findMax());
+        // console.log(studentList);
+    }
+</script>
+</html>

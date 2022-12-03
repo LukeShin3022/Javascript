@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input placeholder="Write full name"/>
+    <input type="number" placeholder="number of children"/>
+    <input type="number" placeholder="number of working experience"/>
+    <input placeholder="Write the base salary"/>
+    <button id="mainBtn" type="button">Add</button>
+    <table>
+        <thead>
+            <tr>
+                <th>EmployeeID</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th># of children</th>
+                <th># of working experience</th>
+                <th>Base Salary</th>
+                <th>Final Salary</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6" align="right">Total Payment:</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+<script>
+     let curency = new Intl.NumberFormat('en-US',{
+            style:'currency',
+            currency:'CAD'
+        });
+    const employeeList = new Map();
+    let inputs = document.querySelectorAll("input");
+    const mainBtn = document.querySelector("#mainBtn");
+    const employeeObj = function(Id,fname,lname,numCh,numExp,salary){
+        this.Id = Id;
+        this.fname = fname;
+        this.lname = lname;
+        this.numCh = parseInt(numCh);
+        this.numExp = parseInt(numExp);
+        this.salary = parseFloat(salary);
+        this.calFinalSalary = function(){
+            this.finalSalary = this.salary;
+            if(this.numCh > 2){
+                this.finalSalary = this.salary + (this.salary * 0.05);
+            }
+            if(this.numExp > 5){
+                this.finalSalary = this.finalSalary + (this.finalSalary * 0.1);
+            }
+            return this.finalSalary;
+        };
+        this.TablePop = function(){
+            const tr = document.createElement("tr");
+            const tbody = document.querySelector("tbody");
+            for(let prName in this){
+                if(typeof this[prName] != "function"){
+                    const td = document.createElement("td");
+                    (prName=="salary") ? td.innerText =curency.format(this[prName]) : td.innerText = this[prName];
+                    tr.appendChild(td);
+                }
+            }
+            // Create the last two td
+            const tdFinal = document.createElement("td");
+            tdFinal.innerText = curency.format(this.calFinalSalary());
+            tr.appendChild(tdFinal);
+            const tdOption = document.createElement("td");
+            tdOption.appendChild(this.delBtn(this.Id));
+            tdOption.appendChild(this.editBtn(this));
+            tr.appendChild(tdOption);
+            tbody.appendChild(tr);
+        };
+        this.delBtn = function(id){
+            const button = document.createElement("button");
+            button.innerText = "Delete";
+            button.addEventListener('click',function(event){
+                let selectedTr = event.target.parentNode.parentNode;
+                selectedTr.parentNode.removeChild(selectedTr);
+                employeeList.delete(id);
+                calTotalSal();
+            })
+            return button;
+        };
+        this.editBtn = function(employeeObj){
+            const button = document.createElement("button");
+            button.innerText = "Edit";
+            button.addEventListener('click',function(event){
+                inputs[0].value = `${employeeObj.fname} ${employeeObj.lname}`;
+                inputs[1].value = employeeObj.numCh;
+                inputs[2].value = employeeObj.numExp;
+                inputs[3].value = employeeObj.salary;
+                mainBtn.innerHTML = "Edit";
+                mainBtn.value = employeeObj.Id;
+            })
+            return button;
+        }
+    }
+   
+    function calTotalSal(){
+        const totalTd = document.querySelector("tfoot tr").lastElementChild;
+        let sum = 0;
+        employeeList.forEach(function(employee,id){
+            sum += employee.calFinalSalary();
+        })
+        totalTd.innerHTML = curency.format(sum);
+    }
+    function inputClear(){
+        for(let inputElement of inputs){
+            inputElement.value = "";
+        }
+    }
+    mainBtn.addEventListener('click',function(event){
+        let fullName = inputs[0].value.split(" ");
+        let editFlag = false;
+        (fullName.length < 2) ? fullName[1] = "" : null;
+        let id;
+        if(event.target.innerHTML == "Add"){
+            id = 1000 + employeeList.size;
+            while(true){
+                if(employeeList.has(id)){
+                    id++;
+                }else{
+                    break;
+                }
+            }
+        }else{
+            id = parseInt(event.target.value);
+            editFlag = true;
+            event.target.innerText = "Add";
+            event.target.value = "";
+        }
+        let newEmployee = new employeeObj(id,fullName[0],fullName[1],inputs[1].value,inputs[2].value,inputs[3].value);
+        employeeList.set(id,newEmployee);
+        (editFlag)? TablePop() : newEmployee.TablePop();
+        calTotalSal();
+        inputClear();
+    });
+    
+    function TablePop(){
+        document.querySelector('tbody').innerHTML = "";
+        employeeList.forEach(function(employeeObj,id){
+            employeeObj.TablePop();
+        })
+    }
+</script>
+</html>

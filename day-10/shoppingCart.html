@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        .children{
+            background-color: salmon;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: .4s;
+            margin-top: 5px;
+            border-radius: 5px;
+            color: white;
+        }
+        .children:hover{
+            background-color: green;
+        }
+        .selected{
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <button type="button">ADD BOX</button>
+    <button type="button" disabled>REMOVE BOX</button>
+    <button type="button" disabled>UP</button>
+    <button type="button" disabled>DOWN</button>
+    <div id="parent">
+       <script></script> 
+    </div>
+</body>
+<script>
+    let selected = null;
+    let counter = 0;
+    $(document).keydown(function(e){
+        console.log(e);
+    });
+    function optionSt(flag,scElement){
+        if(scElement!=null){
+            selected = scElement;
+        }else{
+            selected = null;
+        }
+        $($("button")[1]).attr("disabled",flag);
+        $($("button")[2]).attr("disabled",flag);
+        $($("button")[3]).attr("disabled",flag);
+    }
+    $($("button")[0]).on("click",function(){
+        let box = $("<div></div>");
+        counter++;
+        box.addClass("children");
+        box.text(counter);
+        box.click(function(){
+            // console.log($(this).parent()); //to get the parent 
+            // console.log($(this).siblings()); //get all other siblings
+            // console.log($(this).next());
+            // console.log($(this).prev());
+            // console.log($(this).prevAll());
+            // console.log($(this).nextAll());
+            if(this==selected){
+                $(this).removeClass("selected");
+                optionSt(true,null);
+            }else{
+                $(".children").removeClass("selected");
+                $(this).toggleClass("selected");
+                optionSt(false,this);
+            }
+        });
+        $("#parent").append(box);
+        // console.log($("#parent").children()); //to get all children 
+    })
+    $($("button")).on("click",function(){
+        switch($(this).text()){
+            case "UP":
+                // console.log($("#parent").children().eq($("#parent").children().length-1));
+                if($("#parent").children().first()[0] == selected){
+                    $("#parent").children().last().after(selected);
+                }else{
+                    $(selected).prev().before(selected);
+                }
+                
+            break;
+            case "DOWN":
+                if($("#parent").children().last()[0] == selected){
+                    $("#parent").prepend(selected);
+                }else{
+                    $(selected).next().after(selected);
+                }
+            break;
+        }
+        
+    })
+    $($("button")[1]).on("click",function(){
+            $(selected).remove();
+            optionSt(false,null);
+    })
+</script>
+</html>

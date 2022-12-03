@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul></ul>
+</body>
+<script>
+    let testArr = [6,8,99,3,4,2,11,23,66];
+    let ul = document.querySelector("ul");
+    for(let i=0; i<testArr.length; i++){
+        for(let j=0; j < testArr.length-i+1; j++){
+            if(testArr[j] > testArr[j+1]){
+                let tmp = testArr[j];
+                testArr[j]= testArr[i];
+                testArr[i] = tmp;
+            }
+        }
+    }
+</script>
+</html>
